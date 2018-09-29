@@ -1,4 +1,6 @@
 #!/bin/bash
+sudo apt-get update 
+sudo apt-get install default-jdk -y
 sudo service anup-routing stop
 
 # create anup-routing service
