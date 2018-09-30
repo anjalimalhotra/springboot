@@ -27,11 +27,6 @@ WantedBy=multi-user.target
 
 EOF
 
-cat > /home/ubuntu/deploy/anup-routing <<'EOF'
-#!/bin/sh
-sudo /usr/bin/java -jar /home/ubuntu/deploy/spring-boot-web-0.0.1-SNAPSHOT.jar  >> /home/ubuntu/deploy/logs/routing.log 2>&1
-
-EOF
 
 # remove old directory
 rm -rf /home/ubuntu/deploy
@@ -39,4 +34,9 @@ rm -rf /home/ubuntu/deploy
 # create directory deploy
 mkdir -p /home/ubuntu/deploy 
 
+cat > /home/ubuntu/deploy/anup-routing <<'EOF'
+#!/bin/sh
+sudo /usr/bin/java -jar /home/ubuntu/deploy/spring-boot-web-0.0.1-SNAPSHOT.jar  >> /home/ubuntu/deploy/logs/routing.log 2>&1
+
+EOF
 
