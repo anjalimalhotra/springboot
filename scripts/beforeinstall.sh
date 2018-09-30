@@ -4,29 +4,33 @@ sudo apt-get install default-jdk -y
 sudo service anup-routing stop
 
 # create anup-routing service
-cat > /etc/init/anup-routing.conf <<'EOF'
+cat > /etc/systemd/system/anup-routing.service <<'EOF'
 
-description "anup Routing Server"
 
-  start on runlevel [2345]
-  stop on runlevel [!2345]
-  respawn
-  respawn limit 10 5
+[Unit]
+Description=My Webapp Java REST Service
+[Service]
+User=ubuntu
+# The configuration file application.properties should be here:
+#change this to your workspace
+WorkingDirectory=/home/ubuntu/deploy
+#path to executable. 
+#executable is a bash script which calls jar file
+ExecStart=/home/ubuntu/deploy/anup-routing
+SuccessExitStatus=143
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+[Install]
+WantedBy=multi-user.target
 
-  # run as non privileged user 
-  # add user with this command:
-  ## adduser --system --ingroup www-data --home /opt/apache-tomcat apache-tomcat
-  # Ubuntu 12.04: (use 'exec sudo -u apache-tomcat' when using 10.04)
-  setuid ubuntu
-  setgid ubuntu
 
-  # adapt paths:
-  exec java  -jar /home/ubuntu/deploy/spring-boot-web-0.0.1-SNAPSHOT.jar  >> /home/ubuntu/logs/routing.log 2>&1
+EOF
 
-  # cleanup temp directory after stop
-  post-stop script
-    #rm -rf $CATALINA_HOME/temp/*
-  end script
+cat > /home/ubuntu/deploy/anup-routing <<'EOF'
+#!/bin/sh
+sudo /usr/bin/java -jar /home/ubuntu/deploy/spring-boot-web-0.0.1-SNAPSHOT.jar  >> /home/ubuntu/deploy/logs/routing.log 2>&1
+
 EOF
 
 # remove old directory

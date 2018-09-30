@@ -1,3 +1,4 @@
 #!/bin/bash
-
-sudo service anup-routing start
+sudo systemctl daemon-reload
+sudo systemctl enable anup-routing.service
+sudo systemctl start anup-routing
